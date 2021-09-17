@@ -31,45 +31,45 @@ while [[ $# -gt 0 ]]; do
   case $key in
     -u|--username)
       USERNAME="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -p|--password)
       PASSWORD="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -f|--firmwarefile)
       FIRMWAREFILE="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -b|--bootbank)
       BOOTBANK="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -s|--switch)
       SWITCH="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -a|--apiversion)
       APIVERSION="$2"
-      shift # past argument
-      shift # past value
+      shift #past argument
+      shift #past value
       ;;
     -r|--reboot)
       REBOOT=TRUE
-      shift # past argument
+      shift #past argument
       ;;
     -y|--yes)
       YESTOALL=TRUE
-      shift # past argument
+      shift #past argument
       ;;
-    *)    # unknown option
-      POSITIONAL+=("$1") # save it in an array for later
-      shift # past argument
+    *)    #catch rest
+      POSITIONAL+=("$1") # save them in an array for later
+      shift #past argument
       ;;
   esac
 done
@@ -121,7 +121,6 @@ fi
 echo ""
 fi
 
-
 if [ "$FIRMWAREFILE" != "" ] ;then
   echo "Uploading firmware:"
   status_code=$(curl --write-out '%{http_code}' --location --request POST 'https://'${SWITCH}'/rest/'${APIVERSION}'/firmware?image='${BOOTBANK}'' --header 'Content-Type: multipart/form-data' -F 'fileupload=@'${FIRMWAREFILE}'' --progress-bar -k --output /dev/null --cookie ${COOKIEFILE})
@@ -137,7 +136,6 @@ if [ "$FIRMWAREFILE" != "" ] ;then
 else
   echo "No firmware file specified, skipping upload"
 fi
-
 
 if [ "$REBOOT" == "TRUE" ] ;then
   if [ "$YESTOALL" != "TRUE" ] ;then
