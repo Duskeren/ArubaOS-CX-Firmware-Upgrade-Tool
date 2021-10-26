@@ -2,7 +2,7 @@
 
 #Defaults:
 USERNAME="admin"
-PASSWORD="pass"
+PASSWORD=""
 FIRMWAREFILE=""
 BOOTBANK="secondary"
 SWITCH="127.0.0.1"
@@ -76,9 +76,15 @@ done
 
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
+if [ -z "$PASSWORD" ] ;then
+  echo -n "Enter password: "
+  read PASSWORD
+  echo ""
+fi
+
 echo "Arguments received:"
 echo "Username = ${USERNAME}"
-echo "Password = ${PASSWORD}"
+echo "Password = `sed "s/./\*/g" <<< "${PASSWORD}"`"
 echo "Firmware = ${FIRMWAREFILE}"
 echo "Boot Bank = ${BOOTBANK}"
 echo "Switch = ${SWITCH}"
@@ -89,12 +95,12 @@ echo "Cookiefile = ${COOKIEFILE}"
 echo ""
 
 if [ "$YESTOALL" != "TRUE" ] ;then
-echo -n "Continue (y/n)? "
-read continue
-if [ "$continue" == "${continue#[Yy]}" ] ;then
-    exit 0
-fi
-echo ""
+  echo -n "Continue (y/n)? "
+  read continue
+  if [ "$continue" == "${continue#[Yy]}" ] ;then
+      exit 0
+  fi
+  echo ""
 fi
 
 echo "Getting ready!"
@@ -113,12 +119,12 @@ curl --location --request GET 'https://'${SWITCH}'/rest/'${APIVERSION}'/firmware
 echo ""
 
 if [ "$YESTOALL" != "TRUE" ] ;then
-echo -n "Continue (y/n)? "
-read continue
-if [ "$continue" == "${continue#[Yy]}" ] ;then
-    exit 0
-fi
-echo ""
+  echo -n "Continue (y/n)? "
+  read continue
+  if [ "$continue" == "${continue#[Yy]}" ] ;then
+      exit 0
+  fi
+  echo ""
 fi
 
 if [ "$FIRMWAREFILE" != "" ] ;then
